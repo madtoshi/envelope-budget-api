@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Create Envelopes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div>
+            <a href="/home">Go back</a>
+            <h1>Log new transaction</h1>
+            <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+                <div class="alert alert-danger">
+                  <ul>
+                  <% for(let i = 0; i < errors.length; i++) { %>
+                    <li><%= errors[i].msg %></li>
+                  <% } %>
+                  </ul>
+                </div>
+              <% } %>
+            <p>Budget remaining will be updated automatically<br> with each new transaction. 
+            </p>
+        </div>
+        <form action="/transactions/log-transactions" method="POST">
+            <div>
+                <div>
+                    <div>
+                        <label for="transaction">Choose an envelope:</label>
+                        <select name="envelopeName" id="transaction" required>
+                            <option value="">Please choose an option</option>
+                        <% user.Envelopes.forEach((envelope) => { %>
+                                <option value="<%=envelope.name%>"><%=envelope.name%></option>
+                        <% }) %>
+                        </select>   
+                    </div>
+                    <div>
+                        <label>Amount spent $
+                            <input type="number" id="amountSpent" name="amountSpent" required/>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="notes">
+                            <textarea id="notes" name="notes" rows="5" cols="33" maxlength="255" placeholder="Leave any notes you'd like about this transaction.."></textarea>
+                        </label>
+                    </div>
+                </div>
+                
+            <button type="submit">Submit</button>
+        </form>  
+    </body>
+</html>

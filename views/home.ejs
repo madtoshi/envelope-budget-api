@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Home</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div>
+            <h1>Welcome: <%= user.first %></h1>
+            <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+                <div class="alert alert-danger">
+                  <ul>
+                  <% for(let i = 0; i < errors.length; i++) { %>
+                    <li><%= errors[i].msg %></li>
+                  <% } %>
+                  </ul>
+                </div>
+              <% } %>
+        </div> 
+        <% if (user.Transactions != '') { %>
+            <h2>Your recent transactions:</h2>
+                <% user.Transactions.slice(-5).forEach((Transaction) => { %>
+                    <ol style="padding:0;list-style:none;">
+                    <li><%= Transaction.date %> - $<%= Transaction.amountSpent %> - <%= Transaction.envelopeName %> </li>
+                    </ol>
+                <% }) %>
+                
+        <% } %>
+        <% if (user.Envelopes != '') { %>
+            <form action="transactions/log-transactions" method="GET">
+                <button type="submit">Log new transactions</button>
+            </form>
+        <% } %>
+            <h2>Your envelopes</h2>
+            <div>
+                <% if (user.Envelopes == '') { %>
+                    <h3>No envelopes!</h3>
+                    <form action="/envelopes/setup" method="GET">
+                        <button type="submit">Create envelopes</button>
+                    </form>
+                <% } else { %>
+                    <div>
+                    <% user.Envelopes.forEach((envelope) => { %>
+                        <% if (envelope.budgetRemaing <= envelope.monthlyBudget * .25 || envelope.budgetRemaing == 0) { %>
+                            <h3><%= envelope.name %></h3>
+                            <ul>
+                                <li style="color:rgb(205, 83, 43);">Budget Remaining: <%= envelope.budgetRemaing %></li>
+                                <li>Monthly Budget: <%= envelope.monthlyBudget %></li>
+                            </ul>
+                        <% } if (envelope.budgetRemaing < envelope.monthlyBudget * .60 && envelope.budgetRemaing > envelope.monthlyBudget * .25) { %>
+                            <h3><%= envelope.name %></h3>
+                            <ul>
+                                <li style="color:rgb(221, 170, 51);">Budget Remaining: <%= envelope.budgetRemaing %></li>
+                                <li>Monthly Budget: <%= envelope.monthlyBudget %></li>
+                            </ul>
+                        <% } if ((envelope.budgetRemaing >= envelope.monthlyBudget * .60 && envelope.budgetRemaing < envelope.monthlyBudget) || envelope.budgetRemaing == envelope.monthlyBudget) { %>
+                            <h3><%= envelope.name %></h3>
+                            <ul>
+                                <li style="color:rgb(35, 100, 35);">Budget Remaining: <%= envelope.budgetRemaing %></li>
+                                <li>Monthly Budget: <%= envelope.monthlyBudget %></li>
+                            </ul>
+                        <% } %>
+                    <% }) %>
+                    </div>
+                    <form action="/envelopes/new" method="GET">
+                        <button type="submit">Create another envelope</button>
+                    </form>
+                    <form action="/envelopes/update" method="GET">
+                        <button type="submit">Update envelopes</button>
+                    </form>
+                <% } %>
+            </div>
+            <form action="/logout?_method=DELETE" method="POST">
+                <button type="submit">Log out</button>
+            </form>
+    </body>
+</html>

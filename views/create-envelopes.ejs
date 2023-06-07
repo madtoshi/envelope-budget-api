@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Create Envelopes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div>
+            <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+                <div class="alert alert-danger">
+                  <ul>
+                  <% for(let i = 0; i < errors.length; i++) { %>
+                    <li><%= errors[i].msg %></li>
+                  <% } %>
+                  </ul>
+                </div>
+              <% } %>
+              <a href="/home">Go back</a>
+            <% if (user.Envelopes == '') { %>
+            <h1>Set up your envelopes</h1>
+            <p>Create three envelopes to start. Provide a name for your envelope (i.e. "Groceries")
+                    and an amount you want to budget for that envelope for the month. 
+            </p>
+            <form action="/envelopes/setup" method="POST">
+            <div>
+                <div>
+                     <label>Envelope 1
+                        <input type="text" id="name" name="envelope_1[name]" placeholder="Envelope name" required/>
+                        <input type="number" id="monthlyBudget" name="envelope_1[monthlyBudget]" placeholder="Monthly budget" required/>
+                    </label>
+                </div>
+                <div>
+                    <label>Envelope 2
+                       <input type="text" id="name" name="envelope_2[name]" placeholder="Envelope name" required/>
+                       <input type="number" id="monthlyBudget" name="envelope_2[monthlyBudget]" placeholder="Monthly budget" required/>
+                   </label>
+               </div>
+               <div>
+                <label>Envelope 3
+                   <input type="text" id="name" name="envelope_3[name]" placeholder="Envelope name" required/>
+                   <input type="number" id="monthlyBudget" name="envelope_3[monthlyBudget]" placeholder="Monthly budget" required/>
+               </label>
+           </div>
+                <button type="submit">Submit</button>
+            </form>  
+            <% } else { %>
+                <h1>Add a new envelope</h1>
+                <p>Provide a name for your envelope (i.e. "Churros")
+                    and an amount you want to budget for that envelope for the month. 
+            </p>
+            <form action="/envelopes/new" method="POST">
+                <div>
+                     <label>New Envelope
+                        <input type="text" id="name" name="New_envelope[name]" placeholder="Envelope name" required/>
+                        <input type="number" id="monthlyBudget" name="New_envelope[monthlyBudget]" placeholder="Monthly budget" required/>
+                    </label>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+            <% } %>
+    </body>
+</html>

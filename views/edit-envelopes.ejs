@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Home</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div>
+            <h1>Edit envelopes</h1>
+            <% if (user.Envelopes == '') { %>
+                <h3>No envelopes!</h3>
+                <form action="/envelopes/setup" method="GET">
+                    <button type="submit">Create envelopes</button>
+                </form>
+            <% } %>
+            <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+                <div class="alert alert-danger">
+                  <ul>
+                  <% for(let i = 0; i < errors.length; i++) { %>
+                    <li><%= errors[i].msg %></li>
+                  <% } %>
+                  </ul>
+                </div>
+              <% } %>
+        </div> 
+        <% if (user.selectedEnvelope) { %>
+            <a href="/envelopes/update">Go back</a>
+            <form action="/envelopes/update" method="POST">
+                <h2>Editing: <%=user.selectedEnvelope.name %></h2>
+                <p>Change this envelope's name and/or monthly budget. Leaving a field below blank<br>will leave the name or monthly budget as it was.</p>
+                <p>Note: updating to a new monthly budget will reset the budget remaining for the month<br>to the new monthly budget you set below.</p>
+                <input type="hidden" name="envelopeId" value="<%= user.selectedEnvelope.id %>" />  
+                <label>New name:
+                    <input type="string" id="newName" name="newName"/>
+                </label>
+                <button type="submit">Update name</button><br>
+                <label>New Monthly Budget:
+                    <input type="number" id="newMonthlyBudget" name="newMonthlyBudget"/>
+                </label> 
+                <button type="submit">Update budget</button>
+                <p>Current Monthly Budget: <%= user.selectedEnvelope.monthlyBudget %></p>                     
+            </form>
+        <% } else { %>
+            <a href="/home">Go home</a>
+            <div>
+                <% user.Envelopes.forEach((envelope) => { %>
+                    <form action="/envelopes/update" method="GET">
+                        <h3><%= envelope.name %></h3>
+                        <ul>
+                            <li>Budget Remaining: <%= envelope.budgetRemaing %></li>
+                            <li>Monthly Budget: <%= envelope.monthlyBudget %></li>
+                        </ul> 
+                        <input type="hidden" name="envelopeId" value="<%= envelope.id %>" />                        
+                        <button type="submit">Update envelope</button>
+                    </form>
+                    <form action="/envelopes/delete?_method=DELETE" method="POST">
+                        <input type="hidden" name="envelopeId" value="<%= envelope.id %>" />
+                        <button type="submit">Delete envelope</button>
+                    </form>
+                </div>
+                <% }) %>
+        <% } %>
+    </body>
+</html>
