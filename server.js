@@ -9,7 +9,7 @@ const passport = require('passport');
 const router = require('./api/routes/index.js');
 
 // Server Port
-const PORT = 3000;
+const PORT = 8080;
 
 // App middleware
 app.use(express.urlencoded({ extended: true }));
