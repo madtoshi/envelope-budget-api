@@ -15,7 +15,16 @@ services:
     env_file:
       - .env
     volumes:
-      - db-data:/db-data
+      - db-data:/db-
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 5050:5050
+    depends_on:
+      - db
+    env_file:
+      - .env
   
   redis: 
     image: redis
