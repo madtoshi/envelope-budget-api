@@ -4,24 +4,23 @@ services:
     build: .
     ports:
       - 8080:8080
-    environment:
-      DB_HOST: db
-      REDIS_HOST: redis
+    env_file:
+      - .env
     depends_on:
       - db
       - redis
 
   db: 
     image: postgres
-    environment: 
-      POSTGRES_USER: 
-      POSTGRES_PASSWORD: 
-      POSTGRES_DB: 
+    env_file:
+      - .env
     volumes:
-     - db-data:/db-data
+      - db-data:/db-data
   
   redis: 
     image: redis
+    env_file:
+      - .env
     volumes: 
       - cache-data:/cache-data
 
